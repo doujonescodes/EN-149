@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextInput, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
+import { TextInput, Modal, StyleSheet, Text, Pressable, View, Button, Alert } from 'react-native';
+import axios from 'axios'
 
 const UserProfileModal = ({modalVisible, setModalVisible}) => {
     const [formState, setFormState] = useState({})
@@ -22,10 +23,57 @@ const UserProfileModal = ({modalVisible, setModalVisible}) => {
             </Pressable>
             <TextInput
              style={styles.input}
-             onChangeText = {()=> {}} 
+             onChangeText = {(newValue)=> {
+                setFormState(
+                    {username: newValue}
+                )
+             }} 
              value={formState.username}
             placeholder="Enter Username"
             />
+            <TextInput
+             style={styles.input}
+             onChangeText = {(newValue)=> {
+                setFormState(
+                    {email: newValue}
+                )
+             }} 
+             value={formState.email}
+             placeholder="Enter Email"
+            />
+            <TextInput
+             style={styles.input}
+             onChangeText = {(newValue)=> {
+                setFormState(
+                    {bio: newValue}
+                )
+             }} 
+             value={formState.bio}
+             placeholder="Enter Biography"
+            />
+            <Button
+            title = "Saved Profile"
+            onPress = {() => {
+            axios.post(
+              "http://fakeendpoint.com",
+              formState
+            ).then((response)=> {
+            if(
+                response.data
+            ){
+                Alert.alert(
+                    "Success", 
+                    "User Profile successfully created"
+                )
+            }
+            }).catch((error) => {
+                Alert.alert(
+                    "Error", 
+                    error.message || "Unknown error had occurred"
+                )
+            })
+            }} 
+            ></Button>
           </View>
         </View>
       </Modal>
